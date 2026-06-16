@@ -96,6 +96,15 @@ python3 github_trending_bot.py --debug
 python3 github_trending_bot.py --since weekly --max-repos 8
 ```
 
+### 🧪 Running Unit Tests
+
+This project comes with a comprehensive, zero-dependency unit test suite written with Python's standard `unittest` framework:
+
+```bash
+# Execute the full test suite
+python3 -m unittest discover -s tests -p "test_*.py"
+```
+
 ---
 
 ## ⏰ Scheduling Automation (Cron)
