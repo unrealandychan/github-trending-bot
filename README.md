@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
 
-An elegant, robust, and modular automated agent that scrapes **GitHub Trending** repositories daily, performs history-based deduplication, enriches discoveries with web context via **Tavily Search**, summarizes them with **Google Gemini** or **OpenAI**, and publishes a sharp, professional technical report in **conversational Hong Kong Cantonese (廣東話口語)** to your **Notion Database** and **Telegram**.
+An elegant, robust, and modular automation bot that scrapes **GitHub Trending** repositories daily, performs history-based deduplication, enriches discoveries with web context via **Tavily Search**, summarizes them with **Google Gemini** or **OpenAI** in your preferred language, and publishes a sharp, professional technical report to your **Notion Database** and **Telegram**.
 
-Tailored for AI Engineers, Tech Investors, and solo Podcast creators who want to keep track of high-value open-source trends daily.
+Tailored for AI Engineers, developers, and creators who want to keep track of high-value open-source trends daily.
 
 ---
 
@@ -13,8 +13,8 @@ Tailored for AI Engineers, Tech Investors, and solo Podcast creators who want to
 
 - 🐙 **Zero-Dependency Scraper:** Fetches and parses GitHub Trending directly using Python standard libraries — robust, extremely fast, and free of BeautifulSoup/Playwright overhead.
 - 💡 **Dual-Source Deep Enrichment:** Combines raw repository data with online context from **Tavily Search** to understand *why* a repository is trending.
-- 🗣️ **Conversational Cantonese Output:** Automatically synthesizes witty, engaging, and professional Cantonese reviews via LLMs while keeping technical terms (such as *LLM, agent, framework, sandbox*) in standard English.
-- 📑 **Notion Database Publisher:** Employs a robust **two-step write pattern** (Create metadata page -> append block body) with safe CJK/UTF-8 encoding support and API payload chunking (blocks split into chunks of 50) to prevent Notion rejects.
+- 🗣️ **Configurable Language Support:** Generates reports in your target language (e.g., **English**, **Conversational Cantonese**, **Traditional Chinese**, or **Spanish**) by configuring a simple environment variable, preserving standard technical terms in English.
+- 📑 **Notion Database Publisher:** Employs a robust **two-step write pattern** (Create metadata page -> append block body) with safe UTF-8 encoding support and API payload chunking (blocks split into chunks of 50) to prevent Notion rejects.
 - 🗃️ **Smart Deduplication:** Keeps track of historically recommended projects in `github_trending_history.json` (holds up to 600 items/roughly 2 months) so your daily reports never feel repetitive.
 - 🔔 **Telegram Broadcasting:** Delivers clean HTML summaries with inline repo URLs and direct links to your Notion workspace.
 
@@ -30,7 +30,7 @@ github-trending-bot/
 ├── .gitignore                # Git untracked pattern file
 ├── requirements.txt          # Python dependencies (python-dotenv only!)
 ├── github_trending_bot.py    # Main CLI executable entry point
-├── SKILL.md                  # Hermes-Agent reusable skill file
+├── SKILL.md                  # Reusable skill file for AI agents (e.g., Hermes-Agent)
 └── src/                      # Core domain package
     ├── __init__.py           # Package version definition
     ├── config.py             # Handles loading and validating environment variables
@@ -69,16 +69,16 @@ cp .env.example .env
 
 Open `.env` and configure:
 ```ini
-NOTION_API_KEY=ntn_your_notion_integration_secret
-NOTION_DATABASE_ID=your_notion_database_uuid_here
+NOTION_API_KEY=ntn_yo...n
+NOTION_DATABASE_ID=your_notion_database_id
 
-TAVILY_API_KEY=your_tavily_api_key_here
-
-# Choose 'gemini' (preferred default) or 'openai'
+# Choose 'gemini' (recommended) or 'openai'
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=your_gemini_api_key_here
-```
 
+# Customize your target language (e.g., English, Traditional Chinese, Cantonese, Spanish)
+REPORT_LANGUAGE=English
+```
 *Note: If you want to enable Telegram alerts, make sure to add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` too.*
 
 ### 3. Usage & CLI Command Recipes
@@ -123,8 +123,8 @@ If you are running this with a Hermes Agent, configure a scheduled job in your `
 {
   "action": "create",
   "schedule": "0 3 * * 1-5",
-  "name": "📊 GitHub Trending 日報",
-  "prompt": "Run the daily GitHub Trending Bot to scrape trending projects, summarize them in Cantonese, publish to Notion, and send to Telegram.",
+  "name": "📊 GitHub Trending Daily",
+  "prompt": "Run the daily GitHub Trending Bot to scrape trending projects, summarize them, publish to Notion, and send to Telegram.",
   "script": "github_trending_bot.py",
   "workdir": "/home/ubuntu/github-trending-bot"
 }
@@ -143,4 +143,4 @@ This project maintains rigorous coding standards:
 
 ## 📄 License
 
-This repository is licensed under the **MIT License**. See the `LICENSE` file for details (or standard MIT boilerplate).
+This repository is licensed under the **MIT License**. See the `LICENSE` file for details.

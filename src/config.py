@@ -56,6 +56,9 @@ class Config:
         self.openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
         self.openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o")
         self.gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        
+        # Report Configuration
+        self.report_language: str = os.getenv("REPORT_LANGUAGE", "English")
 
         # History tracking
         self.history_file_path: str = os.getenv(

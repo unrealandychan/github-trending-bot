@@ -36,7 +36,8 @@ class TrendingCoordinator:
         self.llm = LLMService(
             provider=config.llm_provider,
             api_key=config.gemini_api_key if config.llm_provider == "gemini" else config.openai_api_key,
-            model_name=config.gemini_model if config.llm_provider == "gemini" else config.openai_model
+            model_name=config.gemini_model if config.llm_provider == "gemini" else config.openai_model,
+            report_language=config.report_language
         )
         self.notion = NotionService(config.notion_api_key, config.notion_database_id)
         self.telegram = TelegramService(config.telegram_bot_token, config.telegram_chat_id)

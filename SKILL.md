@@ -1,25 +1,25 @@
 ---
 name: github-trending-daily
-description: "Use when scheduling or executing the daily automated GitHub Trending analysis. Scrapes trending repositories, performs history deduplication, enriches with Tavily context, and publishes a structured Cantonese report to Notion and alerts Telegram."
-version: 1.0.0
+description: "Use when scheduling or executing the daily automated GitHub Trending analysis. Scrapes trending repositories, performs history deduplication, enriches with Tavily context, and publishes a structured multi-language (default English) report to Notion and alerts Telegram."
+version: 1.1.0
 author: Eddie & Hermes Agent
 license: MIT
 metadata:
   hermes:
-    tags: [github, trending, cron, notion, telegram, cantonese, automation]
+    tags: [github, trending, cron, notion, telegram, english, cantonese, automation]
     related_skills: [cronjob-deduplication, github-repo-management]
 ---
 
 # Daily GitHub Trending Automation Skill
 
 ## Overview
-This skill provides structured procedures, instructions, and workflows to configure, schedule, and execute the modular **Daily GitHub Trending Bot** repository. This bot scrapes GitHub Trending (`https://github.com/trending`) daily, performs a history deduplication check against already seen projects, enriches new projects with Tavily search context, and calls an LLM (Gemini or OpenAI) to compile a witty, professional report in conversational Hong Kong Cantonese (廣東話口語). The resulting report is published as a new page in a Notion database and can be pushed to Telegram.
+This skill provides structured procedures, instructions, and workflows to configure, schedule, and execute the modular **Daily GitHub Trending Bot** repository. This bot scrapes GitHub Trending (`https://github.com/trending`) daily, performs a history deduplication check against already seen projects, enriches new projects with Tavily search context, and calls an LLM (Gemini or OpenAI) to compile a sharp, professional technical report in any target language (such as English, Traditional Chinese, or conversational Hong Kong Cantonese). The resulting report is published as a new page in a Notion database and can be pushed to Telegram.
 
 ---
 
 ## When to Use
 - **Scheduling Daily Updates:** Automatically compile GitHub trending repos every Monday–Friday morning.
-- **Reporting & Broadcasting:** Send formatted, high-value technical briefs to developers, team chats, or personal Notion boards.
+- **Reporting & Broadcasting:** Send formatted, high-value technical briefs to developers, team chats, or personal Notion boards in your preferred language.
 - **Deduplicated Scanning:** Keep track of trending AI/Open Source tools without seeing repetitive entries.
 
 ---
@@ -44,10 +44,11 @@ cp .env.example .env
 
 Ensure the following variables are specified:
 - `NOTION_API_KEY`: Your Notion integration token (`ntn_...`).
-- `NOTION_DATABASE_ID`: The Notion database ID (`7080c1a5-ebf4-4b61-bcea-3267237ee6f6`).
+- `NOTION_DATABASE_ID`: The Notion database ID.
 - `TAVILY_API_KEY`: Tavily Search Key (for online project context retrieval).
 - `LLM_PROVIDER`: `gemini` or `openai`.
 - `GEMINI_API_KEY` or `OPENAI_API_KEY`: API authentication for your chosen LLM.
+- `REPORT_LANGUAGE`: Set your preferred language (e.g., `English`, `Traditional Chinese`, or `Cantonese`). Default is `English`.
 - `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`: Credentials to broadcast alerts to Telegram.
 
 ---
@@ -83,8 +84,8 @@ Run the following tool command or prompt Hermes to schedule:
 {
   "action": "create",
   "schedule": "0 3 * * 1-5",
-  "name": "📊 GitHub Trending 日報",
-  "prompt": "Run the daily GitHub Trending Bot to scrape trending projects, summarize them in Cantonese, publish to Notion, and send to Telegram.",
+  "name": "📊 GitHub Trending Daily",
+  "prompt": "Run the daily GitHub Trending Bot to scrape trending projects, summarize them, publish to Notion, and send to Telegram.",
   "script": "github_trending_bot.py",
   "workdir": "/home/ubuntu/github-trending-bot"
 }
@@ -99,7 +100,7 @@ Run the following tool command or prompt Hermes to schedule:
    * **Cause:** Large reports can exceed Notion's API block limit if sent all at once.
    * **Solution:** The `NotionService` in this repository automatically chunks block payloads into batches of 50 to prevent size limit rejects.
 
-2. **Chinese Characters rendering incorrectly (Unicode leaks):**
+2. **Characters rendering incorrectly (Unicode leaks):**
    * **Cause:** Writing JSON files without proper encoding overrides.
    * **Solution:** Standardize python IO operations with `encoding="utf-8"` and always pass `ensure_ascii=False` when calling `json.dumps` to write or call HTTP APIs.
 
@@ -112,6 +113,6 @@ Run the following tool command or prompt Hermes to schedule:
 ## ✅ Verification Checklist
 - [ ] Run `python3 github_trending_bot.py --debug` and verify that no API calls fail with `401` or `403`.
 - [ ] Verify that a new page is successfully created in your Notion Database.
-- [ ] Open the newly created Notion page and check that all child blocks (Callouts, Paragraphs, Dividers) are fully written.
+- [ ] Open the newly created Notion page and check that all child blocks (Callouts, Paragraphs, Dividers) are fully written in your target `REPORT_LANGUAGE`.
 - [ ] Confirm that your local `github_trending_history.json` file is populated with recommended repo names.
 - [ ] Confirm that the final Telegram message successfully delivers (if configured).

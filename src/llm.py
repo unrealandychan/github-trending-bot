@@ -94,7 +94,8 @@ class LLMService:
         self,
         provider: str,
         api_key: str,
-        model_name: Optional[str] = None
+        model_name: Optional[str] = None,
+        report_language: str = "English"
     ) -> None:
         """Initializes the LLM integration.
 
@@ -102,9 +103,11 @@ class LLMService:
             provider: Either 'gemini' or 'openai'.
             api_key: The matching API key.
             model_name: Overrides the default model if provided.
+            report_language: The language for report generation.
         """
         self.provider = provider.lower()
         self.api_key = api_key
+        self.report_language = report_language
         
         if self.provider == "gemini":
             self.model_name = model_name or "gemini-2.5-flash"
@@ -223,7 +226,7 @@ class LLMService:
                 - 'main_theme': Short English/Chinese main topic.
                 - 'repos': Dict mapping repo name to Cantonese 'why_it_matters'.
         """
-        logger.info("Requesting Cantonese analysis and summary from %s model...", self.provider)
+        logger.info("Requesting report analysis and summary in %s from %s model...", self.report_language, self.provider)
         
         # Prepare structured repo context for prompt
         repos_data = []
@@ -239,22 +242,22 @@ class LLMService:
             repos_data.append(repo_block)
 
         system_prompt = (
-            "You are a GitHub Trending Analyst helping Eddie, a tech-investing AI Engineer "
-            "from Hong Kong. Your job is to analyze the daily GitHub trending repositories and "
-            "provide a sharp, professional, yet witty and engaging report.\n\n"
-            "CRITICAL RULES:\n"
-            "1. You MUST respond ONLY in valid JSON format. Do not wrap inside ```json...``` markdown.\n"
-            "2. All explanations and analysis MUST be written in conversational Hong Kong Cantonese (廣東話口語, "
-            "e.g., 用「佢地」、「呢個」、「搞掂」而唔係「他們」、「這個」、「搞定」), keeping technical terms (such as "
-            "LLM, agent, framework, sandbox, dataset, fine-tune, RAG) in English.\n"
-            "3. The output JSON must have exactly this keys structure:\n"
-            "{\n"
-            "  \"main_theme\": \"A short description of today's primary trend (max 10 words, e.g., 'AI Agents 與 MCP 生態爆發')\",\n"
-            "  \"theme_summary\": \"A rich 3-5 sentence Cantonese paragraph summarizing today's key trends across these repos.\",\n"
-            "  \"repos_why_it_matters\": {\n"
-            "    \"owner/repo1\": \"A short 2-3 sentence Cantonese explanation of what this repo does and why it is historically/technically significant today.\"\n"
-            "  }\n"
-            "}"
+            f"You are a GitHub Trending Analyst. Your job is to analyze the daily GitHub trending repositories and "
+            f"provide a sharp, professional, yet witty and engaging report.\n\n"
+            f"CRITICAL RULES:\n"
+            f"1. You MUST respond ONLY in valid JSON format. Do not wrap inside ```json...``` markdown.\n"
+            f"2. All explanations, theme summary, and 'why it matters' MUST be written in {self.report_language}.\n"
+            f"   (If the requested language is Cantonese or Cantonese-mouth, use natural conversational "
+            f"   Hong Kong Cantonese (廣東話口語, e.g., 用「佢地」、「呢個」、「搞掂」而唔係「他們」、「這個」、「搞定」), "
+            f"   keeping technical terms such as LLM, agent, framework, sandbox, dataset in standard English).\n"
+            f"3. The output JSON must have exactly this keys structure:\n"
+            f"{{\n"
+            f"  \"main_theme\": \"A short description of today's primary trend (max 10 words, in {self.report_language})\",\n"
+            f"  \"theme_summary\": \"A rich 3-5 sentence paragraph summarizing today's key trends in {self.report_language}.\",\n"
+            f"  \"repos_why_it_matters\": {{\n"
+            f"    \"owner/repo1\": \"A short 2-3 sentence explanation of what this repo does and why it is historically/technically significant today in {self.report_language}.\"\n"
+            f"  }}\n"
+            f"}}\n"
         )
 
         user_prompt = (
