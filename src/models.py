@@ -42,7 +42,7 @@ class TrendReport:
     Attributes:
         date: The date of the report (YYYY-MM-DD).
         repositories: The list of featured trending repositories.
-        theme_summary: A Cantonese summary of today's key trending themes.
+        theme_summary: A language-specific summary of today's key trending themes.
         main_theme: The primary theme of the day.
     """
     date: str

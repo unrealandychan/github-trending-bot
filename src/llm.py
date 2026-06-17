@@ -1,7 +1,7 @@
 """LLM and Tavily Search integration services.
 
 This module provides programmatic access to Gemini and OpenAI API endpoints
-for Cantonese report generation, and Tavily API for background research.
+for report generation, and Tavily API for background research.
 Uses only standard python libraries (urllib) to avoid third-party dependencies.
 """
 
@@ -88,7 +88,7 @@ class TavilyService:
 
 
 class LLMService:
-    """Service to handle generating summaries and analyses in Cantonese."""
+    """Service to handle generating summaries and analyses in any language."""
 
     def __init__(
         self,
@@ -222,9 +222,9 @@ class LLMService:
 
         Returns:
             A dictionary containing:
-                - 'theme_summary': Cantonese overview of today's trend.
-                - 'main_theme': Short English/Chinese main topic.
-                - 'repos': Dict mapping repo name to Cantonese 'why_it_matters'.
+                - 'theme_summary': Language-specific overview of today's trend.
+                - 'main_theme': Short main topic.
+                - 'repos': Dict mapping repo name to 'why_it_matters'.
         """
         logger.info("Requesting report analysis and summary in %s from %s model...", self.report_language, self.provider)
         

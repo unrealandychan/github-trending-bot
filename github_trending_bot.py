@@ -51,6 +51,13 @@ def parse_arguments() -> argparse.Namespace:
         help="GitHub trending period (default: daily)"
     )
     parser.add_argument(
+        "--language",
+        "-l",
+        type=str,
+        default=None,
+        help="Override target report language (defaults to REPORT_LANGUAGE env var or English)"
+    )
+    parser.add_argument(
         "--debug",
         action="store_true",
         help="Enable fine-grained debug logging output"
@@ -71,6 +78,12 @@ def main() -> None:
     try:
         # Load and validate configs
         config = Config(dotenv_path=args.dotenv)
+        
+        # Override language if supplied via CLI
+        if args.language:
+            config.report_language = args.language
+            logger.info("Overriding report language to: %s", args.language)
+
         config.validate_core()
 
         # Instantiate and run coordinator

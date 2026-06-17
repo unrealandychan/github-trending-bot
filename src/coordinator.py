@@ -125,7 +125,7 @@ class TrendingCoordinator:
             logger.info("[%d/%d] Fetching Tavily search context for %s...", idx, len(new_repos), r.repo)
             r.context_analysis = self.tavily.search_repo_context(r.repo)
 
-        # 4. Generate beautiful Cantonese explanations and theme analysis via LLM
+        # 4. Generate beautiful explanations and theme analysis via LLM
         try:
             llm_analysis = self.llm.generate_report_content(today_str, new_repos)
             

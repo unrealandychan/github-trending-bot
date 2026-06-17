@@ -83,7 +83,7 @@ class Config:
         if not self.notion_database_id:
             missing.append("NOTION_DATABASE_ID")
 
-        # Must have at least one LLM key to run Cantonese analysis
+        # Must have at least one LLM key to run report generation
         if self.llm_provider == "gemini" and not self.gemini_api_key:
             # Let's see if we can reuse the OpenAI key instead, or try loading from existing fields
             if self.openai_api_key:

@@ -6,7 +6,7 @@ author: Eddie & Hermes Agent
 license: MIT
 metadata:
   hermes:
-    tags: [github, trending, cron, notion, telegram, english, cantonese, automation]
+    tags: [github, trending, cron, notion, telegram, english, multilingual, automation]
     related_skills: [cronjob-deduplication, github-repo-management]
 ---
 
